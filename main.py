@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 
@@ -23,6 +23,7 @@ class BookForm(FlaskForm):
     book_name = StringField(label="book name", validators=[DataRequired()])
     book_author = StringField(label="book author", validators=[DataRequired()])
     rating = StringField(label="rating", validators=[DataRequired()])
+    add_book = SubmitField(label="Add Book")
 
 
 
@@ -31,13 +32,21 @@ all_books = []
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html", all_books=all_books)
 
 
 @app.route("/add", methods=["GET", "POST"])
 def add():
     form = BookForm()
-    return render_template("add.html", form=form)
+    if form.validate_on_submit():
+        new_book ={"title":form.book_name.data,
+                   "author": form.book_author.data,
+                   "rating": form.rating.data
+        }
+        all_books.append(new_book)
+        print(all_books)
+        return  redirect(url_for("home"))
+    return render_template("add.html", form=form, all_books=all_books)
 
 
 if __name__ == "__main__":
