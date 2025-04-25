@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Edit rating {% endblock %}
+{% block content %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+
+<div class="container mt-5">
+
+    <p> {{ book.title }}</p>
+    <p> Current Rating: {{ book.rating }}</p>
+
+    {{ render_form(edit_form, novalidate=True,
+                   button_map={'edit_rating': 'primary'},
+                   extra_classes='d-flex align-items-center gap-3'
+    )
+    }}
+   <a href="{{ url_for('home') }}" class="btn btn-secondary mt-3">Back to Home</a>
+
+</div>
+<style>
+    .btn-primary {
+        margin-top: 28px;
+        line-height: 1.5;
+
+    }
+</style>
+
+{% endblock %}
